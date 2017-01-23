@@ -6,7 +6,7 @@ A really fast LRU cache for array items (numeric keys)
 npm install array-lru
 ```
 
-[![build status](http://img.shields.io/travis/mafintosh/array-lru.svg?style=flat)](http://travis-ci.org/mafintosh/array-lru)
+[![build status](https://travis-ci.org/mafintosh/array-lru.svg?branch=master)](http://travis-ci.org/mafintosh/array-lru)
 
 Credit to [@dominictarr](https://github.com/dominictarr) for telling me about this neat algorithm for LRUs.
 
