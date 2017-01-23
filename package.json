@@ -1,6 +1,6 @@
 {
   "name": "array-lru",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A really fast LRU cache for array items (numeric keys)",
   "main": "index.js",
   "dependencies": {},
