@@ -32,7 +32,8 @@ Create a new LRU instance. Options include:
 ``` js
 {
   collisions: 4, // how many hash collisions before evicting (default 4)
-  evict: fn // call this function with (index, value) when someone is evicted
+  evict: fn, // call this function with (index, value) when someone is evicted
+  indexedValues: false // set to true if your values has a .index property
 }
 ```
 

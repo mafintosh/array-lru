@@ -18,6 +18,7 @@ function LRU (max, opts) {
   }
 
   this.size = this.buckets * this.collisions
+  this.indexedValues = !!opts.indexedValues
   this.cache = new Array(this.size)
   this.hash = this.buckets === 65536 ? hash : maskedHash(this.buckets - 1)
   this.evict = opts.evict || null
@@ -34,14 +35,15 @@ LRU.prototype.set = function (index, val) {
 
     if (!page) {
       // no exiting version, but we have space to store it
-      page = this.cache[ptr] = new Node(index, val)
+      page = this.cache[ptr] = this.indexedValues ? val : new Node(index, val)
       move(this.cache, pageStart, ptr, page)
       return
     }
 
     if (page.index === index) {
       // update existing version and move to head of bucket
-      page.value = val
+      if (this.indexedValues) this.cache[ptr] = val
+      else page.value = val
       move(this.cache, pageStart, ptr, page)
       return
     }
@@ -50,9 +52,14 @@ LRU.prototype.set = function (index, val) {
   }
 
   // bucket is full, update oldest (last element in bucket)
-  if (this.evict) this.evict(page.index, page.value)
-  page.index = index
-  page.value = val
+  if (this.indexedValues) {
+    if (this.evict) this.evict(page.index, page)
+    this.cache[ptr - 1] = val
+  } else {
+    if (this.evict) this.evict(page.index, page.value)
+    page.index = index
+    page.value = val
+  }
   move(this.cache, pageStart, ptr - 1, page)
 }
 
@@ -70,7 +77,7 @@ LRU.prototype.get = function (index) {
     // we found it! move to head of bucket and return value
     move(this.cache, pageStart, ptr - 1, page)
 
-    return page.value
+    return this.indexedValues ? page : page.value
   }
 
   return null
