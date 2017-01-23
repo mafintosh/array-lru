@@ -1,0 +1,27 @@
+{
+  "name": "array-lru",
+  "version": "0.0.0",
+  "description": "A really fast LRU cache for array items (numeric keys)",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "hashlru": "^1.0.6",
+    "nanobench": "^1.0.3",
+    "standard": "^8.6.0",
+    "tape": "^4.6.3"
+  },
+  "scripts": {
+    "test": "standard && tape test.js",
+    "bench": "node bench.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mafintosh/array-lru.git"
+  },
+  "author": "Mathias Buus (@mafintosh)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafintosh/array-lru/issues"
+  },
+  "homepage": "https://github.com/mafintosh/array-lru"
+}
