@@ -6,9 +6,12 @@ function LRU (max, opts) {
   if (!(this instanceof LRU)) return new LRU(max, opts)
   if (!opts) opts = {}
 
+  // how many collisions before evicting (factor of two for fast modulo)
   this.collisions = factorOfTwo(opts.collisions || opts.bucketSize || 4)
+  // buckets should be a factor of two for fast modulo as well
   this.buckets = factorOf(max, this.collisions) / this.collisions
 
+  // we use 16bit hashing to bucket index must be <0xffff
   while (this.buckets > 65536) {
     this.buckets >>= 1
     this.collisions <<= 1
@@ -30,12 +33,14 @@ LRU.prototype.set = function (index, val) {
     page = this.cache[ptr]
 
     if (!page) {
+      // no exiting version, but we have space to store it
       page = this.cache[ptr] = new Node(index, val)
       move(this.cache, pageStart, ptr, page)
       return
     }
 
     if (page.index === index) {
+      // update existing version and move to head of bucket
       page.value = val
       move(this.cache, pageStart, ptr, page)
       return
@@ -44,9 +49,8 @@ LRU.prototype.set = function (index, val) {
     ptr++
   }
 
+  // bucket is full, update oldest (last element in bucket)
   if (this.evict) this.evict(page.index, page.value)
-
-  // update oldest
   page.index = index
   page.value = val
   move(this.cache, pageStart, ptr - 1, page)
@@ -63,6 +67,7 @@ LRU.prototype.get = function (index) {
     if (!page) return null
     if (page.index !== index) continue
 
+    // we found it! move to head of bucket and return value
     move(this.cache, pageStart, ptr - 1, page)
 
     return page.value
