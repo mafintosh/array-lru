@@ -36,7 +36,7 @@ Create a new LRU instance. Options include:
 }
 ```
 
-Size should be a multipla of `collections`. If not, it will be coerced into one.
+Size should be a multiple of `collections`. If not, it will be coerced into one.
 
 ### `var value = lru.get(index)`
 
